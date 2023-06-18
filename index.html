@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reproductor de video</title>
+    <style>
+        #video-player {
+            width: 640px;
+            height: 360px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reproductor de video</h1>
+
+    <input type="file" id="video-file-input">
+    <div id="video-player-container">
+        <video id="video-player" controls></video>
+        <div id="controls">
+            <button id="play-button">Play</button>
+            <button id="pause-button">Pause</button>
+            <button id="volume-up-button">Subir volumen</button>
+            <button id="volume-down-button">Bajar volumen</button>
+        </div>
+    </div>
+    <div id="loading-message" style="display: none;">Cargando video...</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var videoFileInput = document.getElementById('video-file-input');
+            var videoPlayer = document.getElementById('video-player');
+            var playButton = document.getElementById('play-button');
+            var pauseButton = document.getElementById('pause-button');
+            var volumeUpButton = document.getElementById('volume-up-button');
+            var volumeDownButton = document.getElementById('volume-down-button');
+            var loadingMessage = document.getElementById('loading-message');
+
+            videoFileInput.addEventListener('change', function () {
+                var file = videoFileInput.files[0];
+                if (file && file.type.includes('video/')) {
+                    var fileURL = URL.createObjectURL(file);
+                    videoPlayer.src = fileURL;
+                    loadingMessage.style.display = 'block';
+                } else {
+                    alert('Error: El archivo seleccionado no es un video válido.');
+                }
+            });
+
+            videoPlayer.addEventListener('canplay', function () {
+                loadingMessage.style.display = 'none';
+            });
+
+            videoPlayer.addEventListener('loadstart', function () {
+                loadingMessage.style.display = 'block';
+            });
+
+            playButton.addEventListener('click', function () {
+                videoPlayer.play();
+            });
+
+            pauseButton.addEventListener('click', function () {
+                videoPlayer.pause();
+            });
+
+            volumeUpButton.addEventListener('click', function () {
+                if (videoPlayer.volume < 1) {
+                    videoPlayer.volume += 0.1;
+                }
+            });
+
+            volumeDownButton.addEventListener('click', function () {
+                if (videoPlayer.volume > 0) {
+                    videoPlayer.volume -= 0.1;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
